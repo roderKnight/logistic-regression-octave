@@ -31,23 +31,23 @@ XTest = [ones(m_xtest, 1) XTest];
 
 % get the number of features (columns)
 totalFeatures = size(XTrain,2);
-theta = zeros(1,totalFeatures);
+initial_theta = zeros(1,totalFeatures);
 
 % get the initial cost
-J = calculateCost(theta, XTrain, YTrain);
+J = calculateCost(initial_theta, XTrain, YTrain);
 
 % meta variables
 alpha = 0.003;
-iterations = 200000;
+iterations = 20000;
 
 # run the gradient descent
-[theta, J_history ] = gradientDescent(XTrain, YTrain, theta, alpha,iterations);
+[W, B, J_history] = gradientDescent(XTrain, YTrain, initial_theta, alpha, iterations);
 
 # get the prediction agains the test data matrix and get the accumarray
-prediction = prediction(theta, XTest);
-Accuracy = mean(double(prediction == YTest)) * 100;
+predict = prediction(W, XTest, B);
+Accuracy = mean(double(predict == YTest)) * 100;
 fprintf('Accuracy: %f\n', Accuracy);
-theta
+W
 
 # plot the cost againts the number of iterations
 plot(1:iterations, J_history);
@@ -56,8 +56,8 @@ ylabel('Cost Function');
 title('Cost Function Convergence');
 
 # select a random person to see if he survives or not
-num = 65;
+num = 35;
 test = XTest(num, :)
-probability = sigmoid(test * theta');
+probability = sigmoid(test * W' + B);
 fprintf('The passanger #%d has the probability of surive of %f\n', num, probability);
 
